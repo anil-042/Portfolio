@@ -40,12 +40,68 @@ html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 [data-theme="amber"]{--accent:#D97706;--accent-hover:#B45309;--accent-dim:rgba(217,119,6,.12);--accent-dim2:rgba(217,119,6,.07);--glow:rgba(217,119,6,.12)}
 [data-theme="rose"]{--accent:#E11D48;--accent-hover:#BE123C;--accent-dim:rgba(225,29,72,.12);--accent-dim2:rgba(225,29,72,.07);--glow:rgba(225,29,72,.12)}
 
-body{font-family:var(--font);background:var(--bg);color:var(--text-primary);line-height:1.6;min-height:100vh;overflow-x:hidden;transition:background .35s,color .25s;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);background:var(--bg);color:var(--text-primary);line-height:1.6;min-height:100vh;overflow-x:hidden;transition:background .35s,color .25s;-webkit-font-smoothing:antialiased;cursor:none}
 img{display:block;max-width:100%}
-a{color:inherit;text-decoration:none}
-button{font-family:inherit;cursor:pointer;border:none;background:none}
+a{color:inherit;text-decoration:none;cursor:none}
+button{font-family:inherit;cursor:none;border:none;background:none}
 ul{list-style:none}
 address{font-style:normal}
+
+/* ══════════════════════════════
+   CUSTOM CURSOR SYSTEM
+══════════════════════════════ */
+#cursor-dot{
+  position:fixed;
+  width:8px;height:8px;
+  border-radius:50%;
+  background:#fff;
+  pointer-events:none;
+  z-index:99999;
+  transform:translate(-50%,-50%);
+  transition:width .2s ease,height .2s ease,opacity .2s ease,background .2s ease;
+  mix-blend-mode:difference;
+  will-change:transform;
+}
+#cursor-ring{
+  position:fixed;
+  width:36px;height:36px;
+  border-radius:50%;
+  border:1.5px solid rgba(96,165,250,.6);
+  pointer-events:none;
+  z-index:99998;
+  transform:translate(-50%,-50%);
+  transition:width .35s cubic-bezier(.4,0,.2,1),
+             height .35s cubic-bezier(.4,0,.2,1),
+             border-color .35s ease,
+             opacity .25s ease,
+             background .35s ease;
+  will-change:transform;
+  box-shadow:0 0 12px rgba(96,165,250,.2),inset 0 0 8px rgba(96,165,250,.05);
+}
+#cursor-ring.hovering{
+  width:56px;height:56px;
+  border-color:rgba(96,165,250,.9);
+  background:rgba(96,165,250,.06);
+  box-shadow:0 0 24px rgba(96,165,250,.3),inset 0 0 12px rgba(96,165,250,.08);
+}
+#cursor-ring.clicking{
+  width:28px;height:28px;
+  border-color:rgba(255,255,255,.9);
+  background:rgba(255,255,255,.08);
+}
+#cursor-dot.hovering{
+  width:6px;height:6px;
+  background:rgba(96,165,250,1);
+}
+#cursor-dot.clicking{
+  width:4px;height:4px;
+}
+
+/* Hide cursor on touch/mobile */
+@media(hover:none),(pointer:coarse){
+  #cursor-dot,#cursor-ring{display:none!important}
+  body,a,button{cursor:auto!important}
+}
 
 /* ── Progress bar ── */
 #progress{position:fixed;top:0;left:0;height:2px;background:var(--accent);width:0%;z-index:10000;transition:width .08s linear}
@@ -99,7 +155,7 @@ address{font-style:normal}
 .nav-right{display:flex;align-items:center;gap:.5rem;flex-shrink:0}
 .theme-picker{display:flex;align-items:center;gap:.3rem}
 .theme-swatch{
-  width:16px;height:16px;border-radius:50%;cursor:pointer;
+  width:16px;height:16px;border-radius:50%;cursor:none;
   border:2px solid transparent;transition:transform .15s,border-color .15s;
 }
 .theme-swatch:hover{transform:scale(1.2)}
@@ -223,8 +279,6 @@ h2.section-title{
   transition:color var(--ease),border-color var(--ease),transform var(--ease);
 }
 .btn-ghost:hover{color:var(--text-primary);border-color:var(--accent);transform:translateY(-1px)}
-
-/* Social icons — FIXED: stay below buttons, no navbar overlap */
 .hero-socials{display:flex;gap:.45rem;margin-top:0}
 .social-link{
   width:34px;height:34px;border-radius:8px;
@@ -234,7 +288,6 @@ h2.section-title{
   transition:color var(--ease),border-color var(--ease),background var(--ease);
 }
 .social-link:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-dim)}
-
 .hero-stats{
   display:flex;gap:0;margin-top:2rem;
   border:1px solid var(--border);border-radius:var(--radius-lg);
@@ -244,8 +297,6 @@ h2.section-title{
 .hero-stat:last-child{border-right:none}
 .hero-stat-num{font-size:1.25rem;font-weight:800;color:var(--text-primary);letter-spacing:-.03em;line-height:1}
 .hero-stat-label{font-size:.65rem;color:var(--text-tertiary);margin-top:.2rem;letter-spacing:.03em}
-
-/* ── Profile photo ── */
 .hero-photo-panel{display:flex;flex-direction:column;align-items:center;position:relative}
 .hero-photo-frame{
   width:240px;height:295px;border-radius:18px;
@@ -331,7 +382,7 @@ h2.section-title{
 .project-card{
   background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
   padding:1.35rem;transition:border-color var(--ease),transform var(--ease),box-shadow var(--ease);
-  cursor:pointer;display:flex;flex-direction:column;gap:.65rem;
+  cursor:none;display:flex;flex-direction:column;gap:.65rem;
 }
 .project-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.3)}
 .project-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.65rem}
@@ -343,6 +394,16 @@ h2.section-title{
   transition:color var(--ease),border-color var(--ease);
 }
 .proj-link:hover{color:var(--accent);border-color:var(--accent)}
+
+/* Featured project badge */
+.project-featured-badge{
+  display:inline-flex;align-items:center;gap:.3rem;
+  font-size:.6rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  padding:.18rem .55rem;border-radius:50px;
+  background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green);
+  margin-bottom:.2rem;
+}
+
 .project-name{font-size:.92rem;font-weight:700;color:var(--text-primary);letter-spacing:-.01em;line-height:1.3;text-transform:capitalize}
 .project-desc{font-size:.79rem;color:var(--text-secondary);line-height:1.65;flex:1}
 .project-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.45rem;margin-top:.2rem}
@@ -426,7 +487,7 @@ h2.section-title{
 .form-control{
   width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;
   padding:.6rem .85rem;color:var(--text-primary);font-family:var(--font);font-size:.84rem;
-  outline:none;transition:border-color var(--ease),box-shadow var(--ease);
+  outline:none;transition:border-color var(--ease),box-shadow var(--ease);cursor:none;
 }
 .form-control::placeholder{color:var(--text-tertiary)}
 .form-control:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
@@ -442,7 +503,7 @@ textarea.form-control{resize:vertical;min-height:100px}
   margin-left:auto;width:28px;height:28px;border-radius:6px;
   border:1px solid var(--border);background:var(--bg);
   display:flex;align-items:center;justify-content:center;
-  color:var(--text-tertiary);flex-shrink:0;cursor:pointer;
+  color:var(--text-tertiary);flex-shrink:0;cursor:none;
   transition:color var(--ease),border-color var(--ease);
 }
 .copy-btn:hover{color:var(--accent);border-color:var(--accent)}
@@ -480,7 +541,7 @@ footer{border-top:1px solid var(--border);padding:1.75rem 0;background:var(--bg)
   display:flex;align-items:center;justify-content:center;
   color:var(--text-secondary);opacity:0;transform:translateY(5px);
   pointer-events:none;transition:opacity .22s,transform .22s,color var(--ease),border-color var(--ease);
-  box-shadow:0 3px 14px rgba(0,0,0,.25);cursor:pointer;
+  box-shadow:0 3px 14px rgba(0,0,0,.25);cursor:none;
 }
 #btt.show{opacity:1;transform:none;pointer-events:all}
 #btt:hover{color:var(--accent);border-color:var(--accent)}
@@ -511,6 +572,12 @@ footer{border-top:1px solid var(--border);padding:1.75rem 0;background:var(--bg)
 </style>
 </head>
 <body>
+
+<!-- ══════════════════════════════
+     CUSTOM CURSOR ELEMENTS
+══════════════════════════════ -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
 
 <div id="progress"></div>
 
@@ -543,7 +610,6 @@ footer{border-top:1px solid var(--border);padding:1.75rem 0;background:var(--bg)
   </div>
 </nav>
 
-<!-- Mobile Nav -->
 <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
   <a href="#about" onclick="closeMobile()">About</a>
   <a href="#skills" onclick="closeMobile()">Skills</a>
@@ -557,7 +623,6 @@ footer{border-top:1px solid var(--border);padding:1.75rem 0;background:var(--bg)
 <section id="hero">
   <div class="hero-mesh" aria-hidden="true"></div>
   <div class="container hero-inner">
-
     <div class="hero-left">
       <p class="hero-badge reveal">
         <span class="hero-badge-dot"></span>
@@ -570,17 +635,17 @@ footer{border-top:1px solid var(--border);padding:1.75rem 0;background:var(--bg)
         <span class="hero-typed" id="typedEl"></span><span class="cursor" aria-hidden="true"></span>
       </p>
       <div class="hero-actions reveal" style="transition-delay:.19s">
-        <a href="#projects" class="btn-primary">View Projects →</a>
-        <a href="#contact" class="btn-ghost">Get in Touch</a>
+        <a href="#projects" class="btn-primary magnetic">View Projects →</a>
+        <a href="#contact" class="btn-ghost magnetic">Get in Touch</a>
       </div>
       <div class="hero-socials reveal" style="transition-delay:.25s">
-        <a href="https://github.com/anil-042" target="_blank" rel="noopener" class="social-link" title="GitHub" aria-label="GitHub">
+        <a href="https://github.com/anil-042" target="_blank" rel="noopener" class="social-link magnetic" title="GitHub" aria-label="GitHub">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.56 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
         </a>
-        <a href="https://www.linkedin.com/in/anilkumar-peruru-2759b0351" target="_blank" rel="noopener" class="social-link" title="LinkedIn" aria-label="LinkedIn">
+        <a href="https://www.linkedin.com/in/anilkumar-peruru-2759b0351" target="_blank" rel="noopener" class="social-link magnetic" title="LinkedIn" aria-label="LinkedIn">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
         </a>
-        <a href="mailto:a9866953781@gmail.com" class="social-link" title="Email" aria-label="Email">
+        <a href="mailto:a9866953781@gmail.com" class="social-link magnetic" title="Email" aria-label="Email">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
         </a>
       </div>
@@ -599,7 +664,6 @@ footer{border-top:1px solid var(--border);padding:1.75rem 0;background:var(--bg)
         </div>
       </div>
     </div>
-
     <aside class="hero-photo-panel reveal" style="transition-delay:.2s" aria-label="Profile photo">
       <div style="position:relative">
         <figure class="hero-photo-frame">
@@ -615,7 +679,6 @@ footer{border-top:1px solid var(--border);padding:1.75rem 0;background:var(--bg)
         </p>
       </div>
     </aside>
-
   </div>
 </section>
 
@@ -697,7 +760,7 @@ footer{border-top:1px solid var(--border);padding:1.75rem 0;background:var(--bg)
       <article class="skill-group">
         <h3 class="skill-group-label">Data &amp; AI</h3>
         <ul class="skill-pills">
-          <li class="skill-pill"><span class="skill-dot" style="background:#10B981"></span>AI Dev Tools</li>
+          <li class="skill-pill"><span class="skill-dot" style="background:#10B981"></span>LangChain</li>
           <li class="skill-pill"><span class="skill-dot" style="background:#F59E0B"></span>Data Analysis</li>
           <li class="skill-pill"><span class="skill-dot" style="background:#3776AB"></span>Pandas</li>
           <li class="skill-pill"><span class="skill-dot" style="background:#EE4C2C"></span>NumPy</li>
@@ -850,7 +913,7 @@ footer{border-top:1px solid var(--border);padding:1.75rem 0;background:var(--bg)
           <label class="form-label" for="fmsg">Message</label>
           <textarea id="fmsg" class="form-control" placeholder="What would you like to discuss?"></textarea>
         </div>
-        <button class="form-submit" onclick="sendMsg()">
+        <button class="form-submit magnetic" onclick="sendMsg()">
           Send Message
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         </button>
@@ -859,7 +922,6 @@ footer{border-top:1px solid var(--border);padding:1.75rem 0;background:var(--bg)
   </div>
 </section>
 
-<!-- ═══ FOOTER ═══ -->
 <footer>
   <div class="footer-inner">
     <nav class="footer-links" aria-label="Footer social links">
@@ -888,9 +950,140 @@ footer{border-top:1px solid var(--border);padding:1.75rem 0;background:var(--bg)
 </div>
 
 <script>
+/* ══════════════════════════════
+   CUSTOM CURSOR SYSTEM
+   Premium smooth cursor with magnetic hover
+══════════════════════════════ */
+(function(){
+  // Detect touch/mobile — disable cursor on touch devices
+  const isTouchDevice = () =>
+    window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
+  if(isTouchDevice()) return;
+
+  const dot   = document.getElementById('cursor-dot');
+  const ring  = document.getElementById('cursor-ring');
+
+  // Current mouse position
+  let mouseX = -100, mouseY = -100;
+  // Ring lags behind — lerp target
+  let ringX  = -100, ringY  = -100;
+  // Lerp speed (0–1): lower = more lag/smoothness
+  const LERP = 0.12;
+
+  // Track mouse instantly
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  // Click feedback
+  document.addEventListener('mousedown', () => {
+    dot.classList.add('clicking');
+    ring.classList.add('clicking');
+  });
+  document.addEventListener('mouseup', () => {
+    dot.classList.remove('clicking');
+    ring.classList.remove('clicking');
+  });
+
+  // Hover detection — interactive elements
+  const HOVER_SELECTORS =
+    'a, button, .project-card, .about-card, .exp-card, .skill-pill, .contact-item, .theme-swatch, input, textarea, .copy-btn, .social-link, .nav-cta, .btn-primary, .btn-ghost';
+
+  document.addEventListener('mouseover', e => {
+    if(e.target.closest(HOVER_SELECTORS)){
+      dot.classList.add('hovering');
+      ring.classList.add('hovering');
+    }
+  });
+  document.addEventListener('mouseout', e => {
+    if(e.target.closest(HOVER_SELECTORS)){
+      dot.classList.remove('hovering');
+      ring.classList.remove('hovering');
+    }
+  });
+
+  // RAF animation loop — buttery smooth
+  function animate(){
+    // Dot follows cursor exactly
+    dot.style.left  = mouseX + 'px';
+    dot.style.top   = mouseY + 'px';
+
+    // Ring lerps toward cursor position
+    ringX += (mouseX - ringX) * LERP;
+    ringY += (mouseY - ringY) * LERP;
+    ring.style.left = ringX + 'px';
+    ring.style.top  = ringY + 'px';
+
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+
+  // Hide cursor when leaving window
+  document.addEventListener('mouseleave', () => {
+    dot.style.opacity  = '0';
+    ring.style.opacity = '0';
+  });
+  document.addEventListener('mouseenter', () => {
+    dot.style.opacity  = '1';
+    ring.style.opacity = '1';
+  });
+})();
+
+/* ══════════════════════════════
+   MAGNETIC HOVER EFFECT
+   Buttons gently attract toward cursor
+══════════════════════════════ */
+(function(){
+  if(window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
+
+  const STRENGTH = 0.3; // attraction strength (0–1)
+  const RADIUS   = 80;  // px distance to activate magnetism
+
+  document.querySelectorAll('.magnetic').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      const rect   = el.getBoundingClientRect();
+      const cx     = rect.left + rect.width  / 2;
+      const cy     = rect.top  + rect.height / 2;
+      const dx     = e.clientX - cx;
+      const dy     = e.clientY - cy;
+      const dist   = Math.sqrt(dx*dx + dy*dy);
+
+      if(dist < RADIUS){
+        const pull = (1 - dist/RADIUS) * STRENGTH;
+        el.style.transform = `translate(${dx*pull}px, ${dy*pull}px)`;
+      }
+    });
+
+    el.addEventListener('mouseleave', () => {
+      el.style.transform = '';
+      el.style.transition = 'transform .4s cubic-bezier(.4,0,.2,1)';
+      setTimeout(() => el.style.transition = '', 400);
+    });
+  });
+})();
+
+/* ══════════════════════════════
+   PORTFOLIO LOGIC
+══════════════════════════════ */
 const GITHUB='anil-042';
+
+// Your deployed project — shown first with live badge
+const FEATURED_PROJECT = {
+  name: 'AI-Performance-Management-System',
+  desc: 'AI-powered performance evaluation form generator using React, Flask, LangChain & Groq LLaMA 3.1. Deployed full-stack with Vercel + Render.',
+  url:  'https://ai-performance-management-system.vercel.app/',
+  github: 'https://github.com/anil-042/AI-Performance-Management-System',
+  lang: 'Python',
+  topics: ['React','Flask','LangChain','Groq'],
+  stars: 0,
+  forks: 0,
+  featured: true
+};
+
 const LANG_COLORS={JavaScript:'#F7DF1E',TypeScript:'#3178C6',Python:'#3776AB',HTML:'#E34F26',CSS:'#1572B6',Shell:'#89E051','Jupyter Notebook':'#DA5B0B',Vue:'#42B883',PHP:'#777BB4',Java:'#B07219',Ruby:'#701516',Go:'#00ADD8',Rust:'#DEA584',C:'#555555','C++':'#F34B7D','C#':'#178600',SCSS:'#C6538C',Kotlin:'#7F52FF',Swift:'#F05138',Dart:'#00B4AB'};
-const ICONS=['💻','🌐','🔧','⚙️','📦','🛠️','🎯','📊','🔌','🗂️'];
+const ICONS=['🤖','💻','🌐','🔧','⚙️','📦','🛠️','🎯','📊','🔌'];
 
 const prog=document.getElementById('progress');
 const navbar=document.getElementById('navbar');
@@ -914,7 +1107,7 @@ function updateActiveNav(){
 const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:0.1});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-const phrases=['Full Stack Developer.','React Developer.','Frontend Engineer.','Backend Developer.','Problem Solver.'];
+const phrases=['Full Stack Developer.','React Developer.','Frontend Engineer.','Backend Developer.','AI Developer.','Problem Solver.'];
 let pi=0,ci=0,deleting=false;
 const typedEl=document.getElementById('typedEl');
 function tick(){
@@ -961,76 +1154,108 @@ function animCount(el,target){
   const t=setInterval(()=>{cur=Math.min(cur+step,target);el.textContent=cur;if(cur>=target)clearInterval(t)},28);
 }
 
+// Build a single project card HTML
+function buildCard(r, i, isFeatured){
+  const color = LANG_COLORS[r.lang || r.language] || '#8B5CF6';
+  const topics = (r.topics || []).slice(0,3);
+  const desc   = r.desc || r.description || 'A project by Anilkumar.';
+  const href   = r.url  || r.html_url;
+  const ghLink = r.github || r.html_url;
+  const name   = (r.name || '').replace(/[-_]/g,' ');
+  const lang   = r.lang  || r.language || '';
+
+  return `<a href="${href}" target="_blank" rel="noopener"
+    class="project-card reveal magnetic" role="listitem"
+    style="transition-delay:${i*.06}s">
+    <div class="project-card-top">
+      <span class="project-icon">${ICONS[i % ICONS.length]}</span>
+      <div class="project-links">
+        <a href="${ghLink}" target="_blank" rel="noopener" class="proj-link"
+          title="GitHub" onclick="event.stopPropagation()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.56 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
+        </a>
+        ${isFeatured ? `<a href="${href}" target="_blank" rel="noopener" class="proj-link" title="Live demo" onclick="event.stopPropagation()"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>` : (r.homepage ? `<a href="${r.homepage}" target="_blank" rel="noopener" class="proj-link" title="Live demo" onclick="event.stopPropagation()"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>` : '')}
+      </div>
+    </div>
+    ${isFeatured ? '<span class="project-featured-badge">🟢 Live Deployed</span>' : ''}
+    <h3 class="project-name">${name}</h3>
+    <p class="project-desc">${desc}</p>
+    <footer class="project-footer">
+      <ul class="project-techs">
+        ${lang ? `<li class="tech-pill">${lang}</li>` : ''}
+        ${topics.map(t=>`<li class="tech-pill">${t}</li>`).join('')}
+      </ul>
+      <div class="project-meta">
+        <span>⭐ ${r.stars ?? r.stargazers_count ?? 0}</span>
+        <span>⑂ ${r.forks ?? r.forks_count ?? 0}</span>
+        ${lang ? `<span><span class="lang-dot" style="background:${color}"></span>${lang}</span>` : ''}
+      </div>
+    </footer>
+  </a>`;
+}
+
 async function loadGitHub(){
   try{
-    const headers={'Accept':'application/vnd.github.v3+json'};
-    const reposRes=await fetch(`https://api.github.com/users/${GITHUB}/repos?per_page=100&sort=updated&type=owner`,{headers});
-    if(!reposRes.ok)throw new Error('repos '+reposRes.status);
-    const repos=await reposRes.json();
-    if(!Array.isArray(repos))throw new Error('bad repos');
-    animCount(document.getElementById('statRepos'),repos.length);
-    const featured=repos.filter(r=>!r.fork&&!r.private)
-      .sort((a,b)=>(b.stargazers_count-a.stargazers_count)||(new Date(b.updated_at)-new Date(a.updated_at)))
-      .slice(0,9);
-    renderProjects(featured.length>0?featured:repos.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at)).slice(0,9));
+    const res = await fetch(`https://api.github.com/users/${GITHUB}/repos?per_page=100&sort=updated&type=owner`,
+      {headers:{'Accept':'application/vnd.github.v3+json'}});
+    if(!res.ok) throw new Error('GitHub API '+res.status);
+    const repos = await res.json();
+    if(!Array.isArray(repos)) throw new Error('bad response');
+
+    animCount(document.getElementById('statRepos'), repos.length);
+
+    // Filter and sort public non-fork repos
+    const sorted = repos
+      .filter(r => !r.fork && !r.private && r.name !== 'AI-Performance-Management-System')
+      .sort((a,b) => (b.stargazers_count - a.stargazers_count) || (new Date(b.updated_at) - new Date(a.updated_at)))
+      .slice(0, 8);
+
+    // Featured project always first
+    const allCards = [
+      buildCard(FEATURED_PROJECT, 0, true),
+      ...sorted.map((r, i) => buildCard(r, i+1, false))
+    ].join('');
+
+    document.getElementById('projectsGrid').innerHTML = allCards;
+    document.querySelectorAll('.project-card').forEach(el => {
+      io.observe(el);
+    });
+
+    // Re-apply magnetic to dynamically added cards
+    if(!window.matchMedia('(hover: none), (pointer: coarse)').matches){
+      document.querySelectorAll('.project-card.magnetic').forEach(el => {
+        el.addEventListener('mousemove', e => {
+          const rect = el.getBoundingClientRect();
+          const cx = rect.left + rect.width/2;
+          const cy = rect.top  + rect.height/2;
+          const dx = e.clientX - cx;
+          const dy = e.clientY - cy;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if(dist < 120){
+            const pull = (1 - dist/120) * 0.15;
+            el.style.transform = `translate(${dx*pull}px, ${dy*pull}px) translateY(-2px)`;
+          }
+        });
+        el.addEventListener('mouseleave', () => {
+          el.style.transform = '';
+        });
+      });
+    }
+
   }catch(err){
-    console.error('GitHub load failed:',err);
-    renderFallback();
+    console.warn('GitHub load failed:', err);
+    // Show featured project + fallback cards
+    const fallback = [
+      buildCard(FEATURED_PROJECT, 0, true),
+      ...[
+        {name:'React Dashboard',desc:'Admin dashboard with data visualization and dark mode.',lang:'JavaScript',stars:0,forks:0,topics:['React','Charts'],github:'https://github.com/anil-042',url:'https://github.com/anil-042'},
+        {name:'Node REST API',desc:'RESTful API with Express, JWT auth, and MongoDB.',lang:'JavaScript',stars:0,forks:0,topics:['Node.js','Express'],github:'https://github.com/anil-042',url:'https://github.com/anil-042'},
+        {name:'Data Analysis Tool',desc:'Python analytics for educational engagement data.',lang:'Python',stars:0,forks:0,topics:['Pandas','NumPy'],github:'https://github.com/anil-042',url:'https://github.com/anil-042'},
+      ].map((r,i) => buildCard(r, i+1, false))
+    ].join('');
+    document.getElementById('projectsGrid').innerHTML = fallback;
+    document.querySelectorAll('.project-card').forEach(el => io.observe(el));
   }
-}
-
-function renderProjects(repos){
-  if(!repos.length){document.getElementById('projectsGrid').innerHTML='<p style="color:var(--text-tertiary);font-size:.85rem;grid-column:1/-1;text-align:center;padding:2rem">No public repositories found. <a href="https://github.com/anil-042" target="_blank" style="color:var(--accent)">View on GitHub →</a></p>';return}
-  document.getElementById('projectsGrid').innerHTML=repos.map((r,i)=>{
-    const color=LANG_COLORS[r.language]||'#8B5CF6';
-    const topics=(r.topics||[]).slice(0,3);
-    const desc=r.description||'A project by Anilkumar. Click to explore on GitHub.';
-    return `<a href="${r.html_url}" target="_blank" rel="noopener" class="project-card reveal" role="listitem" style="transition-delay:${i*.06}s">
-      <div class="project-card-top">
-        <span class="project-icon">${ICONS[i%ICONS.length]}</span>
-        <div class="project-links">
-          <span class="proj-link"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.56 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg></span>
-          ${r.homepage?`<a href="${r.homepage}" target="_blank" rel="noopener" class="proj-link" title="Live demo" onclick="event.stopPropagation()"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`:''}
-        </div>
-      </div>
-      <h3 class="project-name">${r.name.replace(/[-_]/g,' ')}</h3>
-      <p class="project-desc">${desc}</p>
-      <footer class="project-footer">
-        <ul class="project-techs">${r.language?`<li class="tech-pill">${r.language}</li>`:''}${topics.map(t=>`<li class="tech-pill">${t}</li>`).join('')}</ul>
-        <div class="project-meta">
-          <span>⭐ ${r.stargazers_count}</span>
-          <span>⑂ ${r.forks_count}</span>
-          ${r.language?`<span><span class="lang-dot" style="background:${color}"></span>${r.language}</span>`:''}
-        </div>
-      </footer>
-    </a>`;
-  }).join('');
-  document.querySelectorAll('.project-card').forEach(el=>io.observe(el));
-}
-
-function renderFallback(){
-  const items=[
-    {name:'Portfolio Website',desc:'Personal developer portfolio with modern design and smooth animations.',lang:'HTML'},
-    {name:'React Dashboard',desc:'Admin dashboard with data visualization, filters, and dark mode support.',lang:'JavaScript'},
-    {name:'Node.js REST API',desc:'RESTful API with Express, JWT authentication, and MongoDB integration.',lang:'JavaScript'},
-    {name:'Data Analysis Tool',desc:'Python analytics tool for educational engagement data using Pandas.',lang:'Python'},
-    {name:'E-commerce UI',desc:'Responsive e-commerce front-end with cart, filters, and checkout flow.',lang:'JavaScript'},
-    {name:'Task Manager App',desc:'Full-stack task manager with real-time updates and user authentication.',lang:'JavaScript'},
-  ];
-  document.getElementById('projectsGrid').innerHTML=items.map((r,i)=>`
-    <a href="https://github.com/${GITHUB}" target="_blank" rel="noopener" class="project-card reveal" role="listitem" style="transition-delay:${i*.06}s">
-      <div class="project-card-top">
-        <span class="project-icon">${ICONS[i%ICONS.length]}</span>
-        <div class="project-links"><span class="proj-link"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.56 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg></span></div>
-      </div>
-      <h3 class="project-name">${r.name}</h3>
-      <p class="project-desc">${r.desc}</p>
-      <footer class="project-footer">
-        <ul class="project-techs"><li class="tech-pill">${r.lang}</li></ul>
-        <div class="project-meta"><span>⭐ 0</span><span>⑂ 0</span></div>
-      </footer>
-    </a>`).join('');
-  document.querySelectorAll('.project-card').forEach(el=>io.observe(el));
 }
 
 loadGitHub();
